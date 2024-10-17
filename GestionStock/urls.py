@@ -20,10 +20,11 @@ from Stock import views_typeequipement
 from Stock import views_produit
 from Stock import views_client
 from Stock import views_partnumber
+from Stock import views_dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views_typeequipement.dashboard, name='dashboard'),
+    path('', views_dashboard.dashboard, name='dashboard'),
     
     path('typeequipement/', views_typeequipement.typeequipement, name='typeequipement'),
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),

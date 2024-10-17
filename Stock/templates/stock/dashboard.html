@@ -3,25 +3,459 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="nav-icons mb-4">
-    <input type="text" class="form-control w-50" placeholder="Search">
-    <div>
-        <button class="btn btn-primary">Share</button>
-        <button class="btn btn-secondary">Export</button>
-    </div>
-</div>
 
-<!-- Sales Card -->
-<div class="card p-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h3>Sales Value</h3>
-        <div>
-            <button class="btn btn-light">Month</button>
-            <button class="btn btn-dark">Week</button>
+{% load static %}
+
+
+{% if messages %}
+{% for message in messages %}
+<p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Conteneur flexbox pour le formulaire à gauche et le tableau à droite -->
+    <div class="form-table-container">
+
+
+        <!-- Tableau à droite -->
+        <div class="table-container">
+            <h2>Dashboard</h2>
+            <!-- Zone de recherche pour filtrer le tableau -->
+            <input type="text" id="search-input" placeholder="Rechercher dans le Stock..." onkeyup="searchTable()"
+                width="1300 px">
+            <!-- <button id="download-button_CSV">Télécharger CSV</button>-->
+            <!-- Téléchargement XLSX -->
+            <button id="download-button">Télécharger XLSX</button>
+
+            <table id="produits-table">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>PART NUMBER</th>
+                        <th>DESIGNATION</th>
+                        <th>SERIAL NUMBER</th>
+                        <th>TYPE EQUIPEMENT</th>
+                        <th>PAYS</th>
+                        <th>QUANTITE</th>
+                        <th>SEUIL CRITIQUE</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    {% for produit in produits_data %}
+                    <tr>
+                        <!-- <td><button class="table-button" onclick="handleAction('{{ produit.0 }}')">Action</button> -->
+                        <td>
+                            <button class="btn-Detail" type="button">Voir Détail</button>
+                        </td>
+                        </td>
+                        <td>{{ produit.0 }}</td>
+                        <td>{{ produit.1 }}</td>
+                        <td>{{ produit.2 }}</td>
+                        <td>{{ produit.4 }}</td>
+                        <td>{{ produit.9 }}</td>
+                        <td>{{ produit.10 }}</td>
+                        <td>{{ produit.11 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">Aucun produit trouvé</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div id="pagination-container"></div>
         </div>
     </div>
-    <h2>$10,567</h2>
-    <p>Yesterday <span class="text-success">+10.57%</span></p>
-    <canvas id="salesChart"></canvas>
-</div>
-{% endblock %}
+
+
+    <!-- Boîte modale pour afficher les détails -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="display: inline;">Mouvement du matériel
+                <label id="dynamicLabel" class="form-label" style="display: inline; margin-left: 10px;"></label>
+            </h2>
+
+            <button id="download-button-mvt">Télécharger les mouvements XLSX</button>
+            <table id="detailTable">
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>ENTREE</th>
+                        <th>SORTIE</th>
+                    </tr>
+                </thead>
+                <tbody id="modalTableBody">
+                    <!-- Les données du produit s'afficheront ici -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- Boîte modale pour confirmer la variation de quantité -->
+    <div id="detailModalQte" class="modal">
+        <div class="modal-content">
+            <span class="closeQte">&times;</span>
+            <h2>Confirmation</h2>
+            <h4>Voulez-vous confirmer la variation de quantité ?</h4>
+            <table>
+                <tr>
+                    <td><button type="button" id="btn_confirm" class="btn-Qte">Confirmer</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- Boîte modale pour confirmer la création de produit -->
+    <div id="detailModalPrdt" class="modal">
+        <div class="modal-content">
+            <span class="closePrdt">&times;</span>
+            <h2>Confirmation</h>
+                <h4>Voulez-vous confirmer la création du matériel ?</h4>
+                <table>
+                    <tr>
+                        <td><button type="button" id="btn_confirmPrdt" class="btn-confirmInsert">Confirmer</button>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    </div>
+
+
+
+    <!-- Script pour gérer la pagination, la recherche et le téléchargement CSV -->
+    <script>
+        let currentPage = 1;
+        let rowsPerPage = 10;
+        let fullTableData = [];  // Stocke toutes les lignes de données
+
+        // Stocke les lignes du tableau dans un tableau JS pour la pagination
+        document.addEventListener('DOMContentLoaded', function () {
+            let rows = document.querySelectorAll("#produits-table tbody tr");
+            rows.forEach(row => {
+                fullTableData.push(row);
+            });
+            displayPage(1);  // Affiche la première page au chargement
+            setupPagination();  // Configure la pagination
+        });
+
+        // Affiche les lignes pour la page donnée
+        function displayPage(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+
+            let tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";  // Efface les lignes actuelles
+
+            let pageRows = fullTableData.slice(start, end);  // Sélectionne les lignes de la page actuelle
+            pageRows.forEach(row => {
+                tableBody.appendChild(row);
+            });
+
+            highlightLowQuantity();  //On colorie les lignes qui ont atteints leur seuil
+        }
+
+        // Configure la pagination
+        function setupPagination() {
+            let pageCount = Math.ceil(fullTableData.length / rowsPerPage);
+            let paginationContainer = document.getElementById("pagination-container");
+            paginationContainer.innerHTML = "";  // Efface les boutons actuels
+
+            for (let i = 1; i <= pageCount; i++) {
+                let button = document.createElement("button");
+                button.innerText = i;
+                button.classList.add("pagination-button");
+                button.addEventListener("click", function () {
+                    currentPage = i;
+                    displayPage(i);
+                });
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        // Fonction pour filtrer les lignes du tableau en fonction de la recherche sur toutes les pages
+        function searchTable() {
+            let input = document.getElementById("search-input").value.toLowerCase();
+            let filteredData = fullTableData.filter(row => {
+                let cells = row.getElementsByTagName("td");
+                let match = false;
+
+                for (let i = 0; i < cells.length; i++) {
+                    let cellValue = cells[i].innerText.toLowerCase();
+                    if (cellValue.indexOf(input) > -1) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                return match;  // Garde seulement les lignes qui correspondent
+            });
+
+            displayFilteredData(filteredData);
+            setupPaginationForFilteredData(filteredData);
+
+        }
+
+        // Affiche les données filtrées
+        function displayFilteredData(filteredData) {
+            let tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";  // Efface les lignes actuelles
+
+            filteredData.slice(0, rowsPerPage).forEach(row => {
+                tableBody.appendChild(row);
+            });
+            highlightLowQuantity();  //On colorie les lignes qui ont atteints leur seuil
+        }
+
+        // Configure la pagination pour les données filtrées
+        function setupPaginationForFilteredData(filteredData) {
+            let pageCount = Math.ceil(filteredData.length / rowsPerPage);
+            let paginationContainer = document.getElementById("pagination-container");
+            paginationContainer.innerHTML = "";  // Efface les boutons actuels
+
+            for (let i = 1; i <= pageCount; i++) {
+                let button = document.createElement("button");
+                button.innerText = i;
+                button.classList.add("pagination-button");
+                button.addEventListener("click", function () {
+                    let start = (i - 1) * rowsPerPage;
+                    let end = start + rowsPerPage;
+                    displayFilteredData(filteredData.slice(start, end));
+                });
+                paginationContainer.appendChild(button);
+            }
+            highlightLowQuantity();  //On colorie les lignes qui ont atteints leur seuil
+        }
+
+
+
+        // Fonction pour vérifier et colorer les lignes en fonction de la quantité
+        function highlightLowQuantity() {
+            // Sélectionne toutes les lignes du tableau (sauf l'en-tête)
+            const rows = document.querySelectorAll("table tbody tr");
+
+            rows.forEach(row => {
+                // Sélectionne la cellule contenant la quantité (par exemple, 4ème colonne, index 3)
+                const critiqueCell = row.cells[7]; // Modifier l'index selon ta colonne "Quantité"
+
+                if (critiqueCell) {
+                    //const quantity = parseInt(quantityCell.textContent, 10);
+                    const critiq = critiqueCell.textContent;
+
+                    // Si la quantité est inférieure à 5, ajoute la classe 'low-quantity'
+                    if (critiq == 'Critique') {
+                        row.classList.add("low-quantity");
+                    }
+                }
+            });
+        }
+
+
+        document.getElementById("download-button").addEventListener("click", function () {
+            // Redirection pour télécharger le fichier Excel
+            window.location.href = "{% url 'export_all_data' %}";
+        });
+
+
+        document.getElementById("download-button-mvt").addEventListener("click", function () {
+
+            // Récupérer le contenu du label dynamique
+            const labelContent = document.getElementById("dynamicLabel").innerText;
+
+            // Encoder le contenu du label pour l'inclure dans l'URL
+            const encodedLabelContent = encodeURIComponent(labelContent);
+
+            // Construire l'URL avec le paramètre GET
+            const url = "{% url 'export_all_data_mouv' %}" + "?label_content=" + encodedLabelContent;
+
+            // Redirection pour télécharger le fichier Excel avec le paramètre
+            window.location.href = url;
+
+
+        });
+
+
+
+
+        // Récupérer le token CSRF à partir des cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Vérifie si ce cookie commence par le nom que nous recherchons
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+
+
+
+
+        // ---------------------------------------------------------POPUP Detail
+        // Récupérer la modale
+        var modal = document.getElementById("detailModal");
+
+        // Récupérer l'élément <span> pour fermer la modale
+        var span = document.getElementsByClassName("close")[0];
+
+
+
+
+        // Exemple de fonction pour la requête AJAX
+        document.querySelectorAll('.btn-Detail').forEach(button => {
+            button.addEventListener('click', function () {
+                // Récupérer la ligne du tableau
+                let row = this.closest('tr');
+                // Récupérer le part_number de la première cellule (ou d'une autre cellule selon ton tableau)
+                let serialnumber = row.cells[3].innerText;
+
+
+                const label = document.getElementById('dynamicLabel');
+                label.textContent = serialnumber;
+
+                const formData = {
+                    serial_number: serialnumber,
+                };
+
+                fetch('/detail_materiel/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(formData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Afficher les données dans la console
+                            console.log('Données récupérées :', data.donnees);
+
+                            // Optionnel : mettre à jour le tableau ou une autre partie de l'UI avec les nouvelles données
+                            //alert(data.message);
+
+                            refreshDataTable(data.donnees);  // 'data.donnees' devrait contenir la liste des produits mis à jour
+
+                            // Afficher le modal
+                            document.getElementById('detailModal').style.display = 'block';
+                        } else {
+                            alert('Erreur : ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des données :', error);
+                    });
+            });
+        });
+
+
+        function refreshDataTable(data) {
+
+            const tableBody = document.querySelector('#detailTable tbody');
+            tableBody.innerHTML = ''; // Réinitialiser le corps du tableau
+
+            if (data && data.length > 0) {
+
+                // Parcourir les données et créer des lignes de tableau
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // Créer des cellules pour chaque colonne
+                    for (const key in item) {
+                        const cell = document.createElement('td');
+                        cell.innerText = item[key]; // Assurez-vous que `item[key]` correspond à vos colonnes
+                        row.appendChild(cell);
+                    }
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+        }
+
+        // Gestion de la fermeture du modal
+        document.querySelector('.close').addEventListener('click', function () {
+            document.getElementById('dataModal').style.display = 'none';
+        });
+
+
+
+        // Fermer la modale lorsque l'utilisateur clique sur <span>
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        // ---------------------------------------------------------Fin POPUP Detail
+
+        // ---------------------------------------------------------Modal confirmation variation Quantité
+        var modalQte = document.getElementById("detailModalQte");
+
+        // Récupérer l'élément <span> pour fermer la modale
+        var spanQte = document.getElementsByClassName("closeQte")[0];
+
+        // Ajouter un événement de clic pour chaque bouton "Voir Détail"
+        document.querySelectorAll('.btn-ConfirQte').forEach(button => {
+            button.addEventListener('click', function () {
+                // Afficher la modale
+                modalQte.style.display = "block";
+            });
+        });
+
+        // Fermer la modale lorsque l'utilisateur clique sur <span>
+        spanQte.onclick = function () {
+            modalQte.style.display = "none";
+        }
+        // ---------------------------------------------------------Fin Modal confirmation variation Quantité
+
+
+        // ---------------------------------------------------------Modal confirmation Insertion Produit
+        var modalPrdt = document.getElementById("detailModalPrdt");
+
+        // Récupérer l'élément <span> pour fermer la modale
+        var spanQte = document.getElementsByClassName("closePrdt")[0];
+
+        // Ajouter un événement de clic pour chaque bouton "Voir Détail"
+        document.querySelectorAll('.btn-CreatePrdt').forEach(button => {
+            button.addEventListener('click', function () {
+                // Afficher la modale
+                modalPrdt.style.display = "block";
+            });
+        });
+
+        // Fermer la modale lorsque l'utilisateur clique sur <span>
+        spanQte.onclick = function () {
+            modalPrdt.style.display = "none";
+        }
+        // ---------------------------------------------------------Fin Modal confirmation Insertion Prdt
+
+
+        // Fermer la modale lorsqu'on clique en dehors
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+            if (event.target == modalQte) {
+                modalQte.style.display = "none";
+            }
+            if (event.target == modalPrdt) {
+                modalPrdt.style.display = "none";
+            }
+        }
+
+
+
+    </script>
+    {% endblock %}
