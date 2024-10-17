@@ -7,12 +7,20 @@ import json
 
 def ListClient(request):
     
+
+    with connection.cursor() as cursor:
+        cursor.execute("{cALL [dbo].[LISTE_PAYS]}")
+        ListePays = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
+        print(ListePays)  # Imprime les données récupérées pour vérifier leur structure
+
+    #return render(request, 'stock/client.html', {'List_Pays': ListePays})
+
     with connection.cursor() as cursor:
         cursor.execute("{cALL [dbo].[LISTE_CLIENT]}")
         ListeClient = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
         print(ListeClient)  # Imprime les données récupérées pour vérifier leur structure
 
-    return render(request, 'stock/client.html', {'List_Client': ListeClient})
+    return render(request, 'stock/client.html', {'List_Client': ListeClient, 'List_Pays': ListePays })
 
 
 def saveclient(request): # Utiliser pour la creation et la modification
@@ -101,13 +109,4 @@ def deleteClient(request): # Utiliser pour la creation et la modification
         
     else:
         return JsonResponse({'status': 'error', 'message': 'Méthode non autorisée'}, status=405)
-
-
-
-
-def dashboard(request):
-    return render(request, 'stock/dashboard.html')
-
-
-
 

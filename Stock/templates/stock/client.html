@@ -192,7 +192,7 @@
                 <td>{{ equipement.1 }}</td>
                 <td>{{ equipement.2 }}</td>
                 <td>{{ equipement.3 }}</td>
-                <td>{{ equipement.4 }}</td>
+                <td>{{ equipement.6 }}</td>
                 <td>{{ equipement.5 }}</td>
             </tr>
             {% empty %}
@@ -233,7 +233,20 @@
                 </tr>
                 <tr>
                     <th>Pays :<span class="required">*</span></th>
-                    <th><input type="text" name="pays" placeholder="Entrez le pays"></th>
+                    <th>
+                        <!-- <input type="text" name="pays" placeholder="Entrez le pays">-->
+
+
+                        <select id="Idpays" name="pays">
+                            <!-- Les options seront injectées ici -->
+                            {% for pays in List_Pays %}
+                            <option value="{{ pays.0 }}">{{ pays.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+
+
+
                 </tr>
                 <tr>
                     <th>Situation geographique :</th>
@@ -476,7 +489,7 @@
         document.querySelector('input[name="nomclient"]').value = "";
         document.querySelector('input[name="contact"]').value = "";
         document.querySelector('input[name="email"]').value = "";
-        document.querySelector('input[name="pays"]').value = "";
+        //document.querySelector('input[name="pays"]').value = "";
         document.querySelector('textarea[name="situation"]').value = "";
     }
 
@@ -528,7 +541,7 @@
         var nomclient = document.querySelector('input[name="nomclient"]').value;
         var contact = document.querySelector('input[name="contact"]').value;
         var email = document.querySelector('input[name="email"]').value;
-        var pays = document.querySelector('input[name="pays"]').value;
+        var pays = document.querySelector('select[name="pays"]').value;
         var situation = document.querySelector('textarea[name="situation"]').value;
 
         // Vérifie que tous les champs sont remplis
@@ -595,7 +608,7 @@
                 nomclient: document.querySelector('input[name="nomclient"]').value,
                 contact: document.querySelector('input[name="contact"]').value,
                 email: document.querySelector('input[name="email"]').value,
-                pays: document.querySelector('input[name="pays"]').value,
+                pays: document.querySelector('select[name="pays"]').value,
                 situation: document.querySelector('textarea[name="situation"]').value,
             };
 
@@ -655,7 +668,18 @@
             document.querySelector('input[name="nomclient"]').value = nomclient;
             document.querySelector('input[name="contact"]').value = contact;
             document.querySelector('input[name="email"]').value = email;
-            document.querySelector('input[name="pays"]').value = pays;
+            //document.querySelector('select[name="pays"]').selectElement.option.text = pays;
+
+            let selectElement = document.querySelector('select[name="pays"]');
+
+            for (let option of selectElement.options) {
+                if (option.text === pays) {
+                    option.selected = true;
+                    break;  // Arrête la boucle une fois que l'option est trouvée
+                }
+            }
+
+
             document.querySelector('textarea[name="situation"]').value = situation;
 
             // Afficher le modal

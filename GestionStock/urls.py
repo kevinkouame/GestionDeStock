@@ -29,6 +29,7 @@ urlpatterns = [
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),
     path('deleteTypeEquipement/', views_typeequipement.deleteTypeEquipement, name='deleteTypeEquipement'),
     
+
     path('client/', views_client.ListClient, name='client'),
     path('enregistreclient/', views_client.saveclient, name='enregistreclient'),
     path('delete_client/', views_client.deleteClient, name='delete_client'),
