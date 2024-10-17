@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from Stock import views_typeequipement
 from Stock import views_produit
+from Stock import views_client
 
 
 urlpatterns = [
@@ -26,6 +27,9 @@ urlpatterns = [
     path('typeequipement/', views_typeequipement.typeequipement, name='typeequipement'),
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),
     path('deleteTypeEquipement/', views_typeequipement.deleteTypeEquipement, name='deleteTypeEquipement'),
+    path('client/', views_client.ListClient, name='client'),
+    path('enregistreclient/', views_client.saveclient, name='enregistreclient'),
+    path('delete_client/', views_client.deleteClient, name='delete_client'),
     path('stock/', views_produit.inserer_produit, name='stock'),
     path('export-data/', views_produit.export_all_data, name='export_all_data'),
     path('get-produit/<str:part_number>/', views_produit.get_produit_data, name='get_produit'),
