@@ -331,7 +331,7 @@ def InsertionPrdt(request):
                         cursor.execute(
                             "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, %s, %s, 0)}",
                             [
-                                part_number,
+                                str(part_number),
                                 designation,
                                 serial_number,
                                 type_equipement,

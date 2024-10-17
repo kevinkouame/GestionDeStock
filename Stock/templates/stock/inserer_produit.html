@@ -328,7 +328,10 @@
                     .then(response => response.json())  // Convertir la réponse en JSON
                     .then(data => {
                         // Injecter les données récupérées dans le formulaire
-                        document.getElementById('PART_NUMBER').value = data.PART_NUMBER;
+                        //document.getElementById('PART_NUMBER').value = data.PART_NUMBER;
+                        document.getElementById('PART_NUMBER_ID').value = data.PARTNUMBER_ID;
+
+
                         document.getElementById('DESIGNATION').value = data.DESIGNATION;
                         document.getElementById('SERIAL_NUMBER').value = data.SERIAL_NUMBER;
                         document.getElementById('TYPE_EQUIPEMENT').value = data.TYPE_EQUIPEMENT;
@@ -339,7 +342,8 @@
 
 
                         // Griser certains champs (désactiver les champs pour qu'ils ne soient pas modifiables)
-                        document.getElementById('PART_NUMBER').disabled = true;
+                        //document.getElementById('PART_NUMBER').disabled = true;
+                        document.getElementById('PART_NUMBER_ID').disabled = true;
                         document.getElementById('DESIGNATION').disabled = true;
                         document.getElementById('SERIAL_NUMBER').disabled = true;
                         document.getElementById('ID_EMPLACEMENT').disabled = true;
@@ -381,7 +385,8 @@
 
             // Si tu veux aussi réactiver des champs grisés (désactivés)
             // Griser certains champs (désactiver les champs pour qu'ils ne soient pas modifiables)
-            document.getElementById('PART_NUMBER').disabled = false;
+            //document.getElementById('PART_NUMBER').disabled = false;
+            document.getElementById('PART_NUMBER_ID').disabled = false;
             document.getElementById('DESIGNATION').disabled = false;
             document.getElementById('SERIAL_NUMBER').disabled = false;
             //document.getElementById('ID_EMPLACEMENT').disabled = false;
@@ -462,7 +467,8 @@
                 else {
                     const formData = {
                         serial_number: document.getElementById('SERIAL_NUMBER').value,
-                        part_number: document.getElementById('PART_NUMBER').value,
+                        //part_number: document.getElementById('PART_NUMBER').value,
+                        part_number: document.getElementById('PART_NUMBER_ID').value,
                         quantite: document.getElementById('QUANTITE').value,
                         operation: document.getElementById('ID_OPERATION').value,
                         commentaire: document.getElementById('COMMENTAIRE').value,
@@ -503,14 +509,17 @@
         document.querySelectorAll('.btn-confirmInsert').forEach(button => {
             button.addEventListener('click', function () {
 
+
                 Qte = document.getElementById('SEUIL_ALERTE').value
                 if (Qte < 0) {
                     alert("Le seuil ne peut pas être négatif.");
                     event.preventDefault();  // Empêche l'envoi du formulaire
                 }
                 else {
+
                     const formData = {
-                        part_number: document.getElementById('PART_NUMBER').value,
+                        //part_number: document.getElementById('PART_NUMBER').value,
+                        part_number: document.getElementById('PART_NUMBER_ID').value,
                         designation: document.getElementById('DESIGNATION').value,
                         serial_number: document.getElementById('SERIAL_NUMBER').value,
                         type_equipement: document.getElementById('TYPE_EQUIPEMENT').value,
