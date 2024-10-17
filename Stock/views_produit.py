@@ -215,7 +215,7 @@ def export_all_data_mouv(request):
 
 
 
-def get_produit_data(request, part_number):
+def get_produit_data(request, serial_number):
     # Rechercher le produit avec le part_number donné
     #with connection.cursor() as cursor:
     #    cursor.execute("{cALL [dbo].[INFO_PRODUIT] (""'"+ part_number +"'"")}")              
@@ -223,7 +223,7 @@ def get_produit_data(request, part_number):
 
     with connection.cursor() as cursor:
         # Appel de la procédure stockée avec des paramètres
-        cursor.execute("{cALL [dbo].[INFO_PRODUIT] (%s)}", [part_number])
+        cursor.execute("{cALL [dbo].[INFO_PRODUIT] (%s)}", [serial_number])
         result = cursor.fetchone()  # Récupérer un enregistrement
 
         # Si aucun résultat n'est trouvé, renvoyer un message d'erreur

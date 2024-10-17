@@ -321,10 +321,10 @@
                 let row = this.closest('tr');
 
                 // Récupérer le part_number de la première cellule (ou d'une autre cellule selon ton tableau)
-                let partNumber = row.cells[1].innerText;
+                let serialnumber = row.cells[3].innerText;
 
                 // Faire un appel AJAX pour récupérer les données du produit
-                fetch(`/get-produit/${partNumber}/`)
+                fetch(`/get-produit/${serialnumber}/`)
                     .then(response => response.json())  // Convertir la réponse en JSON
                     .then(data => {
                         // Injecter les données récupérées dans le formulaire

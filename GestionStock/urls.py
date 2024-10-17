@@ -39,7 +39,7 @@ urlpatterns = [
 
     path('stock/', views_produit.inserer_produit, name='stock'),
     path('export-data/', views_produit.export_all_data, name='export_all_data'),
-    path('get-produit/<str:part_number>/', views_produit.get_produit_data, name='get_produit'),
+    path('get-produit/<str:serial_number>/', views_produit.get_produit_data, name='get_produit'),
     path('mis_qte/', views_produit.mis_qte, name='mis_qte'),
     path('Insertion_Prdt/', views_produit.InsertionPrdt, name='mis_qte'),
     path('detail_materiel/', views_produit.mouv_produit_data, name='detail_prdt'),
