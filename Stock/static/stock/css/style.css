@@ -1,0 +1,209 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    height: 100vh;
+    background-color: #343a40;
+    padding: 1rem;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 1rem 0;
+}
+
+.sidebar a:hover {
+    color: #ced4da;
+}
+
+.content {
+    padding: 2rem;
+}
+
+
+/* Conteneur principal en flexbox pour le formulaire à gauche et le tableau à droite */
+.form-table-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    /* Pour s'adapter aux petits écrans */
+}
+
+/* Style du formulaire */
+form {
+    width: 30%;
+    /* Réduction de la largeur du formulaire */
+    background-color: #f0f9ff;
+    /* Bleu clair pour le fond du formulaire */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Aligner les champs du formulaire et les rendre plus petits */
+form input,
+form select,
+form textarea {
+    width: 100%;
+    /* Chaque champ occupe toute la largeur disponible dans le formulaire */
+    padding: 8px;
+    /* Réduction de l'espace de padding */
+    margin-bottom: 0px;
+    /* Réduction de l'espace entre les champs */
+    border: 1px solid #66b3ff;
+    /* Bordure bleue */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Réduction des champs du formulaire pour qu'ils soient moins larges */
+form input[type="text"],
+form textarea {
+    width: 90%;
+    /* Réduire la largeur de chaque champ */
+}
+
+/* Boutons du formulaire */
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    /* Vert pour les boutons */
+    color: white;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Style du tableau */
+.table-container {
+    width: 65%;
+    /* Réduction de la largeur du tableau */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #66b3ff;
+    /* Bordure bleue */
+    padding: 8px;
+    text-align: left;
+}
+
+/* Alternance des lignes du tableau */
+/*table tbody tr:nth-child(odd) {
+    background-color: #e0f7fa;*/
+/* Bleu clair pour alternance des lignes */
+/*}*/
+
+/* Style des boutons dans le tableau */
+.table-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.table-button:hover {
+    background-color: #45a049;
+}
+
+/* Pagination */
+.pagination-button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: 1px solid #66b3ff;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.pagination-button:hover {
+    background-color: #ddd;
+}
+
+.pagination-button.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-table-container {
+        flex-direction: column;
+    }
+
+    form,
+    .table-container {
+        width: 100%;
+    }
+}
+
+/* Style pour la boîte modale */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+/* Tableau dans la modale */
+#detailTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#detailTable th,
+#detailTable td {
+    border: 1px solid #66b3ff;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Classe pour les lignes avec une quantité faible */
+.low-quantity {
+    background-color: #ffcccc;
+    /* Rouge clair */
+}

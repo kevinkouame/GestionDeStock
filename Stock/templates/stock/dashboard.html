@@ -1,0 +1,27 @@
+{% extends "stock/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="nav-icons mb-4">
+    <input type="text" class="form-control w-50" placeholder="Search">
+    <div>
+        <button class="btn btn-primary">Share</button>
+        <button class="btn btn-secondary">Export</button>
+    </div>
+</div>
+
+<!-- Sales Card -->
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>Sales Value</h3>
+        <div>
+            <button class="btn btn-light">Month</button>
+            <button class="btn btn-dark">Week</button>
+        </div>
+    </div>
+    <h2>$10,567</h2>
+    <p>Yesterday <span class="text-success">+10.57%</span></p>
+    <canvas id="salesChart"></canvas>
+</div>
+{% endblock %}
