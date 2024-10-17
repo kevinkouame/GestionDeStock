@@ -61,7 +61,7 @@
                         <td>{{ produit.0 }}</td>
                         <td>{{ produit.1 }}</td>
                         <td>{{ produit.2 }}</td>
-                        <td>{{ produit.4 }}</td>
+                        <td>{{ produit.3 }}</td>
                         <td>{{ produit.9 }}</td>
                         <td>{{ produit.10 }}</td>
                         <td>{{ produit.11 }}</td>
@@ -334,7 +334,7 @@
 
                         document.getElementById('DESIGNATION').value = data.DESIGNATION;
                         document.getElementById('SERIAL_NUMBER').value = data.SERIAL_NUMBER;
-                        document.getElementById('TYPE_EQUIPEMENT').value = data.TYPE_EQUIPEMENT;
+                        document.getElementById('TYPE_EQUIPEMENT_ID').value = data.ID_TYPE;
                         document.getElementById('ID_EMPLACEMENT').value = data.ID_EMPLACEMENT;
                         document.getElementById('DETAIL_EMPLACEMENT').value = data.DETAIL_EMPLACEMENT;
                         document.getElementById('SEUIL_ALERTE').value = data.SEUIL_ALERTE;
@@ -347,7 +347,7 @@
                         document.getElementById('DESIGNATION').disabled = true;
                         document.getElementById('SERIAL_NUMBER').disabled = true;
                         document.getElementById('ID_EMPLACEMENT').disabled = true;
-                        document.getElementById('TYPE_EQUIPEMENT').disabled = true;
+                        document.getElementById('TYPE_EQUIPEMENT_ID').disabled = true;
                         document.getElementById('DETAIL_EMPLACEMENT').disabled = true;
                         document.getElementById('SEUIL_ALERTE').disabled = true;
                         document.getElementById('FORM_QUANTITE_STOCK').disabled = true;
@@ -390,7 +390,7 @@
             document.getElementById('DESIGNATION').disabled = false;
             document.getElementById('SERIAL_NUMBER').disabled = false;
             //document.getElementById('ID_EMPLACEMENT').disabled = false;
-            document.getElementById('TYPE_EQUIPEMENT').disabled = false;
+            document.getElementById('TYPE_EQUIPEMENT_ID').disabled = false;
             document.getElementById('DETAIL_EMPLACEMENT').disabled = false;
             document.getElementById('SEUIL_ALERTE').disabled = false;
             document.getElementById('ID_EMPLACEMENT').disabled = false;
@@ -522,7 +522,7 @@
                         part_number: document.getElementById('PART_NUMBER_ID').value,
                         designation: document.getElementById('DESIGNATION').value,
                         serial_number: document.getElementById('SERIAL_NUMBER').value,
-                        type_equipement: document.getElementById('TYPE_EQUIPEMENT').value,
+                        type_equipement: document.getElementById('TYPE_EQUIPEMENT_ID').value,
                         seuil_alerte: document.getElementById('SEUIL_ALERTE').value,
                         id_emplacement: document.getElementById('ID_EMPLACEMENT').value,
                         detail_emplacement: document.getElementById('DETAIL_EMPLACEMENT').value,

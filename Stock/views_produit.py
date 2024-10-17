@@ -45,7 +45,7 @@ def inserer_produit(request):
             part_number = form.cleaned_data['part_number']
             designation = str(form.cleaned_data['designation'])
             serial_number = str(form.cleaned_data['serial_number'])
-            type_equipement = str(form.cleaned_data['type_equipement'])
+            type_equipement = form.cleaned_data['type_equipement']
             id_emplacement = int(form.cleaned_data['id_emplacement'])
             seuil_alerte = int(form.cleaned_data['seuil_alerte'])
             detail_emplacement = str(form.cleaned_data['detail_emplacement'])
@@ -64,7 +64,7 @@ def inserer_produit(request):
                             part_number,
                             designation,
                             serial_number,
-                            type_equipement,
+                            str(type_equipement),
                             str(id_emplacement),
                             str(seuil_alerte),
                             detail_emplacement,
