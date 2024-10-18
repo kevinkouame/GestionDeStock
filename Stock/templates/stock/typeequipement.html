@@ -172,6 +172,7 @@
             <tr>
                 <th>Action</th>
                 <th>ID</th>
+                <th>PARTNUMBER</th>
                 <th>CATEGORIE</th>
                 <th>CONSTRUCTEUR</th>
                 <th>CAPACITE</th>
@@ -192,6 +193,7 @@
                 <td>{{ equipement.2 }}</td>
                 <td>{{ equipement.3 }}</td>
                 <td>{{ equipement.4 }}</td>
+                <td>{{ equipement.5 }}</td>
             </tr>
             {% empty %}
             <tr>
@@ -216,6 +218,10 @@
                 <tr>
                     <th><label name="labelid">ID :</label></th>
                     <th><input type="text" name="id" readOnly></th>
+                </tr>
+                <tr>
+                    <th>Partnumber :<span class="required">*</span></th>
+                    <th><input type="text" name="partnumber" placeholder="Entrez le partnumber"></th>
                 </tr>
                 <tr>
                     <th>Categorie :<span class="required">*</span></th>
@@ -467,6 +473,7 @@
     // ---------------------------------------------------------POPUP Ajouter
     function resetForm() {
         // Sélectionne tous les champs de type input et textarea dans la table
+        document.querySelector('input[name="partnumber"]').value = "";
         document.querySelector('input[name="categorie"]').value = "";
         document.querySelector('input[name="constructeur"]').value = "";
         document.querySelector('input[name="capacite"]').value = "";
@@ -518,13 +525,14 @@
 
     // ---------------------------------------------------------Modal confirmation Ajout
     function validateForm() {
+        var partnumber = document.querySelector('input[name="partnumber"]').value;
         var categorie = document.querySelector('input[name="categorie"]').value;
         var constructeur = document.querySelector('input[name="constructeur"]').value;
         var capacite = document.querySelector('input[name="capacite"]').value;
         var description = document.querySelector('textarea[name="description"]').value;
 
         // Vérifie que tous les champs sont remplis
-        if (categorie === "" || constructeur === "" || capacite === "") {
+        if (categorie === "" || constructeur === "" || capacite === "" || partnumber === "") {
             alert("Tous les champs marqués comme obligatoires doivent être complétés.");
             return false; // Empêche l'envoi du formulaire
         }
@@ -584,6 +592,7 @@
 
             const formData = {
                 id: document.querySelector('input[name="id"]').value,
+                partnumber: document.querySelector('input[name="partnumber"]').value,
                 categorie: document.querySelector('input[name="categorie"]').value,
                 constructeur: document.querySelector('input[name="constructeur"]').value,
                 capacite: document.querySelector('input[name="capacite"]').value,
@@ -628,10 +637,11 @@
 
             // Extraire les données de la ligne (enfants du tr)
             const id = row.cells[1].textContent;
-            const categorie = row.cells[2].textContent;
-            const constructeur = row.cells[3].textContent;
-            const capacite = row.cells[4].textContent;
-            const description = row.cells[5].textContent;
+            const partnumber = row.cells[2].textContent;
+            const categorie = row.cells[3].textContent;
+            const constructeur = row.cells[4].textContent;
+            const capacite = row.cells[5].textContent;
+            const description = row.cells[6].textContent;
 
             // Remplir les champs du formulaire avec les données extraites
             document.querySelector('label[name="label_confirmation"]').innerText = "Voulez-vous confirmer la modification ?";
@@ -642,6 +652,7 @@
             document.querySelector('input[name="id"]').readOnly = true;
 
             document.querySelector('input[name="id"]').value = id;
+            document.querySelector('input[name="partnumber"]').value = partnumber;
             document.querySelector('input[name="categorie"]').value = categorie;
             document.querySelector('input[name="constructeur"]').value = constructeur;
             document.querySelector('input[name="capacite"]').value = capacite;

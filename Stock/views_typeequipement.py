@@ -24,6 +24,7 @@ def savetypeequipement(request): # Utiliser pour la creation et la modification
 
             # Récupérer les données
             id = data.get('id').strip()
+            partnumber = data.get('partnumber').strip()
             categorie = data.get('categorie').strip()
             constructeur = data.get('constructeur').strip()
             capacite = data.get('capacite').strip()
@@ -31,13 +32,14 @@ def savetypeequipement(request): # Utiliser pour la creation et la modification
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                     "{cALL [dbo].[PS_TYPE_EQUIPEMENT] (%s, %s, %s, %s, %s)}",
+                     "{cALL [dbo].[PS_TYPE_EQUIPEMENT] (%s, %s, %s, %s, %s, %s)}",
                         [
                             categorie,
                             constructeur,
                             capacite,
                             description,
                             id,
+                            partnumber,
                         ]
                     )
                 result = cursor.fetchone()  # ou cursor.fetchall() selon le cas
