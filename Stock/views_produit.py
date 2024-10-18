@@ -314,14 +314,14 @@ def InsertionPrdt(request):
             designation = data.get('designation')
             serial_number = data.get('serial_number')
             type_equipement = data.get('type_equipement')
-            seuil_alerte = data.get('seuil_alerte')
+            #seuil_alerte = data.get('seuil_alerte')
             id_emplacement = data.get('id_emplacement')
             detail_emplacement = data.get('detail_emplacement')
 
 
-            if(designation and serial_number and type_equipement and seuil_alerte and id_emplacement and detail_emplacement):
+            if(designation and serial_number and type_equipement and id_emplacement and detail_emplacement):
 
-                if (int(seuil_alerte) > 0):
+                #if (int(seuil_alerte) > 0):
                     
                     #with connection.cursor() as cursor:
                     #    cursor.execute("{cALL [dbo].[PS_PRODUIT] (""'"+ part_number +"'"",""'"+designation+"'"",""'"+serial_number+"'"",""'"+type_equipement+"'"",""'"+str(id_emplacement)+"'"",""'"+str(seuil_alerte)+"'"",""'"+detail_emplacement+"'"",0)}")
@@ -330,13 +330,12 @@ def InsertionPrdt(request):
                     with connection.cursor() as cursor:
                         # Utiliser des paramètres pour éviter les problèmes d'injection SQL et d'échappement
                         cursor.execute(
-                            "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, %s, 0)}",
+                            "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, 0)}",
                             [
                                 designation,
                                 serial_number,
                                 type_equipement,
                                 str(id_emplacement),
-                                str(seuil_alerte),
                                 detail_emplacement,
                             ]
                         )
@@ -359,8 +358,8 @@ def InsertionPrdt(request):
 
                         else:  # part_number existe déjà
                             return JsonResponse({'status': 'error', 'message': 'Erreur lors de l''insertion.'}, status=400)
-                else:      
-                    return JsonResponse({'status': 'error', 'message': 'Le seuil doit être supérieur à 0'}, status=400)
+                #else:      
+                #    return JsonResponse({'status': 'error', 'message': 'Le seuil doit être supérieur à 0'}, status=400)
             else:      
                     return JsonResponse({'status': 'error', 'message': 'Veuillez renseigner tous les champs'}, status=400)
             

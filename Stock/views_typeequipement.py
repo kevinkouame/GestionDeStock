@@ -28,11 +28,12 @@ def savetypeequipement(request): # Utiliser pour la creation et la modification
             categorie = data.get('categorie').strip()
             constructeur = data.get('constructeur').strip()
             capacite = data.get('capacite').strip()
+            seuil = data.get('seuil').strip()
             description = data.get('description').strip()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                     "{cALL [dbo].[PS_TYPE_EQUIPEMENT] (%s, %s, %s, %s, %s, %s)}",
+                     "{cALL [dbo].[PS_TYPE_EQUIPEMENT] (%s, %s, %s, %s, %s, %s, %s)}",
                         [
                             categorie,
                             constructeur,
@@ -40,6 +41,7 @@ def savetypeequipement(request): # Utiliser pour la creation et la modification
                             description,
                             id,
                             partnumber,
+                            str(seuil),
                         ]
                     )
                 result = cursor.fetchone()  # ou cursor.fetchall() selon le cas

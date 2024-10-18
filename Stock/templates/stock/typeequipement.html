@@ -176,6 +176,7 @@
                 <th>CATEGORIE</th>
                 <th>CONSTRUCTEUR</th>
                 <th>CAPACITE</th>
+                <th>SEUIL</th>
                 <th>DESCRIPTION</th>
             </tr>
         </thead>
@@ -193,6 +194,7 @@
                 <td>{{ equipement.2 }}</td>
                 <td>{{ equipement.3 }}</td>
                 <td>{{ equipement.4 }}</td>
+                <td>{{ equipement.6 }}</td>
                 <td>{{ equipement.5 }}</td>
             </tr>
             {% empty %}
@@ -234,6 +236,10 @@
                 <tr>
                     <th>Capacité :<span class="required">*</span></th>
                     <th><input type="text" name="capacite" placeholder="Entrez la capacité"></th>
+                </tr>
+                <tr>
+                    <th>Seuil :<span class="required">*</span></th>
+                    <th><input name="seuil" placeholder="Entrez le seuil"></input></th>
                 </tr>
                 <tr>
                     <th>Description :</th>
@@ -477,6 +483,7 @@
         document.querySelector('input[name="categorie"]').value = "";
         document.querySelector('input[name="constructeur"]').value = "";
         document.querySelector('input[name="capacite"]').value = "";
+        document.querySelector('input[name="seuil"]').value = "";
         document.querySelector('textarea[name="description"]').value = "";
     }
 
@@ -528,11 +535,12 @@
         var partnumber = document.querySelector('input[name="partnumber"]').value;
         var categorie = document.querySelector('input[name="categorie"]').value;
         var constructeur = document.querySelector('input[name="constructeur"]').value;
+        var seuil = document.querySelector('input[name="seuil"]').value;
         var capacite = document.querySelector('input[name="capacite"]').value;
         var description = document.querySelector('textarea[name="description"]').value;
 
         // Vérifie que tous les champs sont remplis
-        if (categorie === "" || constructeur === "" || capacite === "" || partnumber === "") {
+        if (categorie === "" || constructeur === "" || capacite === "" || partnumber === "" || seuil === "") {
             alert("Tous les champs marqués comme obligatoires doivent être complétés.");
             return false; // Empêche l'envoi du formulaire
         }
@@ -597,6 +605,7 @@
                 constructeur: document.querySelector('input[name="constructeur"]').value,
                 capacite: document.querySelector('input[name="capacite"]').value,
                 description: document.querySelector('textarea[name="description"]').value,
+                seuil: document.querySelector('input[name="seuil"]').value,
             };
 
             fetch('/savetypeequipement/', {
@@ -641,7 +650,8 @@
             const categorie = row.cells[3].textContent;
             const constructeur = row.cells[4].textContent;
             const capacite = row.cells[5].textContent;
-            const description = row.cells[6].textContent;
+            const description = row.cells[7].textContent;
+            const seuil = row.cells[6].textContent;
 
             // Remplir les champs du formulaire avec les données extraites
             document.querySelector('label[name="label_confirmation"]').innerText = "Voulez-vous confirmer la modification ?";
@@ -656,6 +666,7 @@
             document.querySelector('input[name="categorie"]').value = categorie;
             document.querySelector('input[name="constructeur"]').value = constructeur;
             document.querySelector('input[name="capacite"]').value = capacite;
+            document.querySelector('input[name="seuil"]').value = seuil;
             document.querySelector('textarea[name="description"]').value = description;
 
             // Afficher le modal

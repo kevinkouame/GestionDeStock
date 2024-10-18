@@ -6,7 +6,7 @@ class ProduitForm(forms.Form):
     serial_number = forms.CharField(max_length=250, label="Serial Number", widget=forms.TextInput(attrs={'id': 'SERIAL_NUMBER'}))
     #type_equipement = forms.CharField(max_length=250, label="Type Equipement", widget=forms.TextInput(attrs={'id': 'TYPE_EQUIPEMENT'}))
     type_equipement1 = forms.ChoiceField(choices=[], label="Type Equipement", widget=forms.Select(attrs={'id': 'TYPE_EQUIPEMENT_ID'}))
-    seuil_alerte = forms.IntegerField(label="Seuil d'alerte", min_value=0, widget=forms.NumberInput(attrs={'id': 'SEUIL_ALERTE'}))
+    #seuil_alerte = forms.IntegerField(label="Seuil d'alerte", min_value=0, widget=forms.NumberInput(attrs={'id': 'SEUIL_ALERTE'}))
     #id_emplacement = forms.IntegerField(label="ID Emplacement")
     # Liste déroulante pour les emplacements
     id_emplacement = forms.ChoiceField(choices=[], label="Emplacement", widget=forms.Select(attrs={'id': 'ID_EMPLACEMENT'}))  # Les choix seront remplis dans la vue
@@ -56,7 +56,7 @@ class ProduitForm(forms.Form):
             cursor.execute("{CALL [dbo].[LISTE_TYPE_EQUIPEMENT]}")
             listtypeequiment = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
 
-        partnumber_choices = [(part[0], f"{part[1], part[2], part[3], part[3]}") for part in listtypeequiment]
+        partnumber_choices = [(part[0], f"{part[1], part[2], part[3], part[4], part[6]}") for part in listtypeequiment]
 
         return partnumber_choices  
 
