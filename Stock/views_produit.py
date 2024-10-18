@@ -74,7 +74,7 @@ def inserer_produit(request):
                 # Récupérer le retour de la procédure, par exemple, un message ou un code d'erreur
                 if result:
                     code_retour = result[0]
-                    if code_retour == part_number:  # Enregistrement avec succès
+                    if code_retour == 1:  # Enregistrement avec succès
                         messages.success(request, 'Matériel inséré avec succès.')
                     else:  # part_number existe déjà
                         messages.error(request, 'Erreur : le numéro de pièce existe déjà.')
@@ -346,7 +346,7 @@ def InsertionPrdt(request):
                     if result:
                         code_retour = result[0]
                         print(result[0])
-                        if code_retour == serial_number: #part_number:  # Enregistrement avec succès
+                        if code_retour == '1': #part_number:  # Enregistrement avec succès
                         
                             # Récupérer les données mises à jour pour le tableau
                             # Remplacez cette partie par votre logique pour récupérer les données de la base
