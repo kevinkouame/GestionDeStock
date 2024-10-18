@@ -21,6 +21,7 @@ from Stock import views_produit
 from Stock import views_client
 from Stock import views_partnumber
 from Stock import views_dashboard
+from Stock import views_pays
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,9 @@ urlpatterns = [
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),
     path('deleteTypeEquipement/', views_typeequipement.deleteTypeEquipement, name='deleteTypeEquipement'),
     
+    path('listepays/', views_pays.pays, name='listepays'),
+    path('enregistrepays/', views_pays.savepays, name='enregistrepays'),
+    path('deletepays/', views_pays.deletepays, name='deletepays'),
 
     path('client/', views_client.ListClient, name='client'),
     path('enregistreclient/', views_client.saveclient, name='enregistreclient'),

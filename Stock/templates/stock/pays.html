@@ -1,0 +1,629 @@
+{% extends "stock/base.html" %}
+
+{% block title %}Pays{% endblock %}
+
+{% block content %}
+
+<style>
+    #TableAjouter th:first-child {
+        width: 150px;
+        /* Ajuste la largeur selon ton besoin */
+    }
+
+    #TableSuppression_button,
+    #TableSuppression_button th,
+    #TableSuppression_button td,
+    #TableAjouter,
+    #TableAjouter th,
+    #TableAjouter td {
+        border: none;
+        /* Masque les bordures du tableau */
+    }
+
+    /* Optionnel : pour ajuster la largeur des zones de texte */
+    #TableAjouter input[type="text"] {
+        width: 80%;
+        /* Ajuste cette valeur selon tes besoins */
+    }
+
+    /* Ajuste la largeur des champs de texte */
+    #TableAjouter textarea {
+        width: 100%;
+        /* Pour que les champs occupent toute la largeur de la cellule */
+    }
+
+    /* Ajuste la hauteur du champ texte multi-lignes */
+    #TableAjouter textarea {
+        height: 100px;
+        /* Ajuste la hauteur selon tes besoins */
+    }
+
+
+    /* Style pour centrer les boutons */
+    #TableSuppression_button #modalTableBody th,
+    #TableAjouter_button #modalTableBody th {
+        text-align: center;
+        /* Centre les boutons */
+    }
+
+
+    #TableAjouter_button,
+    #TableAjouter_button th,
+    #TableAjouter_button td {
+        border: none;
+        /* Masque les bordures du tableau */
+    }
+
+    #TableAjouter_button button {
+        padding: 10px 20px;
+        margin: 10px;
+        background-color: #4CAF50;
+        /* Couleur de fond des boutons */
+        color: white;
+        /* Couleur du texte */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #TableAjouter_button button:hover {
+        background-color: #45a049;
+        /* Changement de couleur au survol */
+    }
+
+    .required {
+        color: red;
+        /* Couleur de l'astérisque */
+    }
+
+    /**************************************/
+    #ModalSuppression .modal,
+    #ModalConfirmation .modal {
+        display: none;
+        /* Masquer par défaut */
+        position: fixed;
+        /* Rester à la même position */
+        z-index: 1000;
+        /* Au-dessus des autres éléments */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Largeur pleine */
+        height: 100%;
+        /* Hauteur pleine */
+        overflow: auto;
+        /* Permet de faire défiler si nécessaire */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Fond noir transparent */
+    }
+
+    #ModalSuppression .modal-content,
+    #ModalConfirmation .modal-content {
+        background-color: #fefefe;
+        /* Couleur de fond du modal */
+        margin: auto;
+        /* Centre le modal horizontalement */
+        padding: 10px;
+        /* Espace intérieur */
+        border: 1px solid #888;
+        /* Bordure */
+        width: 200px;
+        /* Largeur du modal */
+        height: auto;
+        /* Hauteur auto */
+        min-height: 100px;
+        /* Hauteur minimale */
+        text-align: center;
+        /* Centrer le texte */
+        border-radius: 5px;
+        /* Coins arrondis */
+        position: absolute;
+        /* Positionner absolument pour un meilleur centrage */
+        top: 50%;
+        /* Positionner à 50% de la hauteur de l'écran */
+        left: 50%;
+        /* Positionner à 50% de la largeur de l'écran */
+        transform: translate(-50%, -50%);
+        /* Ajuster pour centrer */
+    }
+
+    #ModalSuppression #TableSuppression_button,
+    #ModalConfirmation #TableAjouter_button {
+        width: 100%;
+        /* Largeur totale pour le tableau */
+    }
+
+    #ModalSuppression .btn-confsuppression,
+    #ModalConfirmation .btn-confirm {
+        padding: 5px 10px;
+        /* Ajuster le padding du bouton */
+        margin-top: 10px;
+        /* Espacement au-dessus du bouton */
+        background-color: #4CAF50;
+        /* Couleur de fond */
+        color: white;
+        /* Couleur du texte */
+        border: none;
+        /* Pas de bordure */
+        border-radius: 5px;
+        /* Coins arrondis */
+        cursor: pointer;
+        /* Curseur main */
+    }
+
+    #ModalSuppression .btn-confsuppression:hover,
+    #ModalConfirmation .btn-confirm:hover {
+        background-color: #45a049;
+        /* Couleur au survol */
+    }
+</style>
+
+<h2>Pays</h2>
+<!-- Tableau à droite -->
+<div class="table-container">
+    <!-- Zone de recherche pour filtrer le tableau -->
+    <input type="text" id="search-input" placeholder="Rechercher dans le tableau..." onkeyup="searchTable()"
+        width="1300 px">
+    </br>
+    <button class="Ajouter_button" id="Ajouterbutton">Ajouter</button>
+
+    <table id="produits-table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>ID</th>
+                <th>PAYS</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            {% for equipement in List_Pays %}
+            <tr>
+                <!-- <td><button class="table-button" onclick="handleAction('{{ produit.0 }}')">Action</button> -->
+                <td>
+                    <button class="btn-modifier" type="button">Modifier</button>
+                    <button class="btn-Suppression" type="button">Supprimer</button>
+                </td>
+                </td>
+                <td>{{ equipement.0 }}</td>
+                <td>{{ equipement.1 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Aucun produit trouvé</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div id="pagination-container"></div>
+</div>
+
+
+<!-- Boîte modale pour ajouter -->
+<div id="AjouterModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <table id="TableAjouter">
+            <tbody>
+                <tr>
+                    <th><label name="labelid">ID :</label></th>
+                    <th><input type="text" name="id" readOnly></th>
+                </tr>
+                <tr>
+                    <th>Pays :<span class="required">*</span></th>
+                    <th><input type="text" name="pays" placeholder="Entrez le pays"></th>
+                </tr>
+            </tbody>
+        </table>
+
+        <table id="TableAjouter_button">
+            <tbody id="modalTableBody">
+                <tr>
+                    <th><button class="Confir_button" id="valider_btn">Valider</button></th>
+                    <th><button class="Annuler_button" id="annuler_btn">Annuler</button></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Boîte modale pour ajouter -->
+
+
+<!-- Boîte modale pour confirmer l'insertion -->
+<div id="ModalConfirmation" class="modal">
+    <div class="modal-content">
+        <span class="closePrdt">&times;</span>
+
+        <table id="TableAjouter_button">
+            <tbody id="modalTableBody">
+                <tr>
+                    <th><label name="label_confirmation"></label></th>
+                </tr>
+                <tr>
+                    <th><button type="button" id="btn_confirm" class="btn-confirm">Confirmer</button></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Boîte modale pour confirmer l'insertion -->
+
+
+
+<!-- Boîte modale pour confirmer la suppression -->
+<div id="ModalSuppression" class="modal">
+    <div class="modal-content">
+        <span class="closeSupp">&times;</span>
+
+        <table id="TableSuppression_button">
+            <tbody id="modalTableBody">
+                <tr>
+                    <th><label name="label_confirmation">Souhaitez-vous confirmer la suppression ?</label></th>
+                </tr>
+                <tr>
+                    <th><button type="button" id="btn_suppression" class="btn-confsuppression">Confirmer</button></th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Boîte modale pour confirmer la suppression -->
+
+
+
+<script>
+
+    let currentPage = 1;
+    let rowsPerPage = 10;
+    let fullTableData = [];  // Stocke toutes les lignes de données
+
+    // Stocke les lignes du tableau dans un tableau JS pour la pagination
+    document.addEventListener('DOMContentLoaded', function () {
+        let rows = document.querySelectorAll("#produits-table tbody tr");
+        rows.forEach(row => {
+            fullTableData.push(row);
+        });
+        displayPage(1);  // Affiche la première page au chargement
+        setupPagination();  // Configure la pagination
+    });
+
+
+    // Affiche les lignes pour la page donnée
+    function displayPage(page) {
+        let start = (page - 1) * rowsPerPage;
+        let end = start + rowsPerPage;
+
+        let tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = "";  // Efface les lignes actuelles
+
+        let pageRows = fullTableData.slice(start, end);  // Sélectionne les lignes de la page actuelle
+        pageRows.forEach(row => {
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    // Configure la pagination
+    function setupPagination() {
+        let pageCount = Math.ceil(fullTableData.length / rowsPerPage);
+        let paginationContainer = document.getElementById("pagination-container");
+        paginationContainer.innerHTML = "";  // Efface les boutons actuels
+
+        for (let i = 1; i <= pageCount; i++) {
+            let button = document.createElement("button");
+            button.innerText = i;
+            button.classList.add("pagination-button");
+            button.addEventListener("click", function () {
+                currentPage = i;
+                displayPage(i);
+            });
+            paginationContainer.appendChild(button);
+        }
+    }
+
+
+    // Fonction pour filtrer les lignes du tableau en fonction de la recherche sur toutes les pages
+    function searchTable() {
+        let input = document.getElementById("search-input").value.toLowerCase();
+        let filteredData = fullTableData.filter(row => {
+            let cells = row.getElementsByTagName("td");
+            let match = false;
+
+            for (let i = 0; i < cells.length; i++) {
+                let cellValue = cells[i].innerText.toLowerCase();
+                if (cellValue.indexOf(input) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            return match;  // Garde seulement les lignes qui correspondent
+        });
+
+        displayFilteredData(filteredData);
+        setupPaginationForFilteredData(filteredData);
+
+    }
+
+
+    // Affiche les données filtrées
+    function displayFilteredData(filteredData) {
+        let tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = "";  // Efface les lignes actuelles
+
+        filteredData.slice(0, rowsPerPage).forEach(row => {
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    // Configure la pagination pour les données filtrées
+    function setupPaginationForFilteredData(filteredData) {
+        let pageCount = Math.ceil(filteredData.length / rowsPerPage);
+        let paginationContainer = document.getElementById("pagination-container");
+        paginationContainer.innerHTML = "";  // Efface les boutons actuels
+
+        for (let i = 1; i <= pageCount; i++) {
+            let button = document.createElement("button");
+            button.innerText = i;
+            button.classList.add("pagination-button");
+            button.addEventListener("click", function () {
+                let start = (i - 1) * rowsPerPage;
+                let end = start + rowsPerPage;
+                displayFilteredData(filteredData.slice(start, end));
+            });
+            paginationContainer.appendChild(button);
+        }
+    }
+
+
+
+    // ---------------------------------------------------------POPUP Suppression
+    // Récupérer la modale
+    var modalSupp = document.getElementById("ModalSuppression");
+
+    // Récupérer l'élément <span> pour fermer la modale
+    var spanSupp = document.getElementsByClassName("closeSupp")[0];
+
+    // Gestion de la fermeture du modal
+    document.querySelector('.close').addEventListener('click', function () {
+        document.getElementById('modalSupp').style.display = 'none';
+    });
+
+
+    // Fermer la modale lorsque l'utilisateur clique sur <span>
+    spanSupp.onclick = function () {
+        modalSupp.style.display = "none";
+    }
+
+
+    document.querySelectorAll('.btn-Suppression').forEach(button => {
+        button.addEventListener('click', function () {
+
+            // Récupérer la ligne associée au bouton
+            const row = this.closest('tr');
+            // Récupérer la valeur de la colonne (par exemple, l'ID du type)
+            const idType = row.cells[1].textContent;
+
+            modalSupp.style.display = 'block';
+
+            // Lorsque l'utilisateur confirme la suppression
+            document.querySelector('.btn-confsuppression').addEventListener('click', function () {
+                // Appeler l'API Python avec l'ID à supprimer
+                fetch('/deletepays/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),  // Inclure CSRF si nécessaire
+                    },
+                    body: JSON.stringify({ id: idType }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert(data.message);
+                            window.location.reload();
+                        } else {
+                            alert('Erreur lors de la suppression : ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur :', error);
+                    });
+
+                // Cacher le modal après la confirmation
+                modal.style.display = "none";
+            });
+
+
+
+        });
+    });
+    // ---------------------------------------------------------POPUP Suppression
+
+
+
+
+    // ---------------------------------------------------------POPUP Ajouter
+    function resetForm() {
+        // Sélectionne tous les champs de type input et textarea dans la table
+        document.querySelector('input[name="pays"]').value = "";
+    }
+
+    // Récupérer la modale
+    var modal = document.getElementById("AjouterModal");
+
+    // Récupérer l'élément <span> pour fermer la modale
+    var span = document.getElementsByClassName("close")[0];
+
+    // Gestion de la fermeture du modal
+    document.querySelector('.close').addEventListener('click', function () {
+        document.getElementById('dataModal').style.display = 'none';
+    });
+
+
+    // Fermer la modale lorsque l'utilisateur clique sur <span>
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // Exemple de fonction pour la requête AJAX
+    document.querySelectorAll('.Annuler_button').forEach(button => {
+        button.addEventListener('click', function () {
+            resetForm();
+            document.getElementById('AjouterModal').style.display = 'none';
+        });
+    });
+
+
+    // Exemple de fonction pour la requête AJAX
+    document.querySelectorAll('.Ajouter_button').forEach(button => {
+        button.addEventListener('click', function () {
+            document.querySelector('label[name="label_confirmation"]').innerText = "Voulez-vous confirmer la création ?";
+            document.querySelector('input[name="id"]').value = "";
+            document.querySelector('input[name="id"]').style.display = "none";
+            document.querySelector('label[name="labelid"]').style.display = "none";
+            document.getElementById('AjouterModal').style.display = 'block';
+        });
+    });
+
+    // ---------------------------------------------------------Fin POPUP Ajouter
+
+
+
+
+
+    // ---------------------------------------------------------Modal confirmation Ajout
+    function validateForm() {
+        var categorie = document.querySelector('input[name="pays"]').value;
+
+        // Vérifie que tous les champs sont remplis
+        if (categorie === "") {
+            alert("Tous les champs marqués comme obligatoires doivent être complétés.");
+            return false; // Empêche l'envoi du formulaire
+        }
+        return true
+    }
+
+
+    var modalConfirm = document.getElementById("ModalConfirmation");
+
+    // Récupérer l'élément <span> pour fermer la modale
+    var spanConfir = document.getElementsByClassName("closePrdt")[0];
+
+    // Ajouter un événement de clic pour chaque bouton "Voir Détail"
+    document.querySelectorAll('.Confir_button').forEach(button => {
+        button.addEventListener('click', function () {
+
+            var retour = validateForm();
+
+            if (retour) {
+                // Afficher la modale
+                modalConfirm.style.display = "block";
+            }
+        });
+    });
+
+    // Fermer la modale lorsque l'utilisateur clique sur <span>
+    spanConfir.onclick = function () {
+        modalConfirm.style.display = "none";
+    }
+    // ---------------------------------------------------------Fin Modal confirmation Insertion
+
+
+
+
+
+    //------------------------------Valide la confirmation
+    // Récupérer le token CSRF à partir des cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Vérifie si ce cookie commence par le nom que nous recherchons
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    document.querySelectorAll('.btn-confirm').forEach(button => {
+        button.addEventListener('click', function () {
+
+            const formData = {
+                id: document.querySelector('input[name="id"]').value,
+                pays: document.querySelector('input[name="pays"]').value,
+            };
+
+            fetch('/enregistrepays/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        window.location.reload()
+                    } else {
+                        alert('Erreur : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur  :', error);
+                });
+
+            modalConfirm.style.display = "none";
+        });
+    });
+    //------------------------------Fin Valide la confirmation
+
+
+
+
+    //------------------------------Bouton Modification
+    // Sélectionner tous les boutons de modification
+    document.querySelectorAll('.btn-modifier').forEach(button => {
+        button.addEventListener('click', function () {
+            // Récupérer la ligne associée au bouton
+            const row = this.closest('tr');
+
+            // Extraire les données de la ligne (enfants du tr)
+            const id = row.cells[1].textContent;
+            const pays = row.cells[2].textContent;
+
+
+            // Remplir les champs du formulaire avec les données extraites
+            document.querySelector('label[name="label_confirmation"]').innerText = "Voulez-vous confirmer la modification ?";
+
+            document.getElementById('AjouterModal').style.display = "block";
+            document.querySelector('input[name="id"]').style.display = "block";
+            document.querySelector('label[name="labelid"]').style.display = "block";
+            document.querySelector('input[name="id"]').readOnly = true;
+
+            document.querySelector('input[name="id"]').value = id;
+            document.querySelector('input[name="pays"]').value = pays;
+
+
+            // Afficher le modal
+            const modal = document.getElementById('AjouterModal');
+            modal.style.display = "block";
+        });
+    });
+    //------------------------------Bouton Modification
+
+</script>
+
+
+{% endblock %}
