@@ -42,7 +42,7 @@ def inserer_produit(request):
         form = ProduitForm(request.POST)  # Utilise le formulaire ProduitForm avec les données POST
         if form.is_valid():
             # Récupérer les données du formulaire
-            part_number = form.cleaned_data['part_number']
+            #part_number = form.cleaned_data['part_number']
             designation = str(form.cleaned_data['designation'])
             serial_number = str(form.cleaned_data['serial_number'])
             type_equipement = form.cleaned_data['type_equipement']
@@ -59,9 +59,8 @@ def inserer_produit(request):
 
                 with connection.cursor() as cursor:
                     cursor.execute(
-                        "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, %s, %s, 0)}",
+                        "{cALL [dbo].[PS_PRODUIT] %s, %s, %s, %s, %s, %s, 0)}",
                         [
-                            part_number,
                             designation,
                             serial_number,
                             str(type_equipement),
@@ -253,6 +252,7 @@ def mis_qte(request):
             quantite = data.get('quantite')
             operation = data.get('operation')
             commentaire = data.get('commentaire')
+            client = data.get('client')
 
             if (int(quantite) > 0):
                 #with connection.cursor() as cursor:
@@ -262,12 +262,13 @@ def mis_qte(request):
                 with connection.cursor() as cursor:
                     # Appel de la procédure stockée avec des paramètres
                     cursor.execute(
-                        "{cALL [dbo].[PS_QTE] (%s, %s, %s, %s)}",
+                        "{cALL [dbo].[PS_QTE] (%s, %s, %s, %s, %s)}",
                         [
                             serial_number,
                             quantite,
                             operation,
-                            commentaire
+                            commentaire,
+                            client
                         ]
                     )                   
                     # Récupérer un enregistrement
@@ -309,7 +310,7 @@ def InsertionPrdt(request):
             data = json.loads(request.body)
 
             # Extraire les valeurs de l'objet JSON
-            part_number = data.get('part_number')
+            #part_number = data.get('part_number')
             designation = data.get('designation')
             serial_number = data.get('serial_number')
             type_equipement = data.get('type_equipement')
@@ -318,7 +319,7 @@ def InsertionPrdt(request):
             detail_emplacement = data.get('detail_emplacement')
 
 
-            if(part_number and designation and serial_number and type_equipement and seuil_alerte and id_emplacement and detail_emplacement):
+            if(designation and serial_number and type_equipement and seuil_alerte and id_emplacement and detail_emplacement):
 
                 if (int(seuil_alerte) > 0):
                     
@@ -329,9 +330,8 @@ def InsertionPrdt(request):
                     with connection.cursor() as cursor:
                         # Utiliser des paramètres pour éviter les problèmes d'injection SQL et d'échappement
                         cursor.execute(
-                            "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, %s, %s, 0)}",
+                            "{cALL [dbo].[PS_PRODUIT] (%s, %s, %s, %s, %s, %s, 0)}",
                             [
-                                str(part_number),
                                 designation,
                                 serial_number,
                                 type_equipement,

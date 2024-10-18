@@ -320,7 +320,7 @@
                 // Récupérer la ligne du tableau
                 let row = this.closest('tr');
 
-                // Récupérer le part_number de la première cellule (ou d'une autre cellule selon ton tableau)
+                // Récupérer le serial_number de la première cellule (ou d'une autre cellule selon ton tableau)
                 let serialnumber = row.cells[3].innerText;
 
                 // Faire un appel AJAX pour récupérer les données du produit
@@ -329,7 +329,7 @@
                     .then(data => {
                         // Injecter les données récupérées dans le formulaire
                         //document.getElementById('PART_NUMBER').value = data.PART_NUMBER;
-                        document.getElementById('PART_NUMBER_ID').value = data.PARTNUMBER_ID;
+                        //document.getElementById('PART_NUMBER_ID').value = data.PARTNUMBER_ID;
 
 
                         document.getElementById('DESIGNATION').value = data.DESIGNATION;
@@ -343,7 +343,7 @@
 
                         // Griser certains champs (désactiver les champs pour qu'ils ne soient pas modifiables)
                         //document.getElementById('PART_NUMBER').disabled = true;
-                        document.getElementById('PART_NUMBER_ID').disabled = true;
+                        //document.getElementById('PART_NUMBER_ID').disabled = true;
                         document.getElementById('DESIGNATION').disabled = true;
                         document.getElementById('SERIAL_NUMBER').disabled = true;
                         document.getElementById('ID_EMPLACEMENT').disabled = true;
@@ -361,6 +361,9 @@
 
                         document.getElementById('QUANTITE').style.display = 'block';
                         document.querySelector('label[for="QUANTITE"]').style.display = 'block';  // Libellé
+
+                        //document.getElementById('CLIENT_ID').style.display = 'block';
+                        //document.querySelector('label[for="CLIENT_ID"]').style.display = 'block';  // Libellé
 
                         document.getElementById('ID_OPERATION').style.display = 'block';
                         document.querySelector('label[for="ID_OPERATION"]').style.display = 'block';  // Libellé
@@ -386,7 +389,7 @@
             // Si tu veux aussi réactiver des champs grisés (désactivés)
             // Griser certains champs (désactiver les champs pour qu'ils ne soient pas modifiables)
             //document.getElementById('PART_NUMBER').disabled = false;
-            document.getElementById('PART_NUMBER_ID').disabled = false;
+            //document.getElementById('PART_NUMBER_ID').disabled = false;
             document.getElementById('DESIGNATION').disabled = false;
             document.getElementById('SERIAL_NUMBER').disabled = false;
             //document.getElementById('ID_EMPLACEMENT').disabled = false;
@@ -402,6 +405,9 @@
 
             document.getElementById('QUANTITE').style.display = 'none';
             document.querySelector('label[for="QUANTITE"]').style.display = 'none';  // Libellé
+
+            document.getElementById('CLIENT_ID').style.display = 'none';
+            document.querySelector('label[for="CLIENT_ID"]').style.display = 'none';  // Libellé
 
             document.getElementById('ID_OPERATION').style.display = 'none';
             document.querySelector('label[for="ID_OPERATION"]').style.display = 'none';  // Libellé
@@ -427,6 +433,9 @@
 
             document.getElementById('QUANTITE').style.display = 'none';
             document.querySelector('label[for="QUANTITE"]').style.display = 'none';  // Libellé
+
+            document.getElementById('CLIENT_ID').style.display = 'none';
+            document.querySelector('label[for="CLIENT_ID"]').style.display = 'none';  // Libellé
 
             document.getElementById('ID_OPERATION').style.display = 'none';
             document.querySelector('label[for="ID_OPERATION"]').style.display = 'none';  // Libellé
@@ -468,10 +477,11 @@
                     const formData = {
                         serial_number: document.getElementById('SERIAL_NUMBER').value,
                         //part_number: document.getElementById('PART_NUMBER').value,
-                        part_number: document.getElementById('PART_NUMBER_ID').value,
+                        //part_number: document.getElementById('PART_NUMBER_ID').value,
                         quantite: document.getElementById('QUANTITE').value,
                         operation: document.getElementById('ID_OPERATION').value,
                         commentaire: document.getElementById('COMMENTAIRE').value,
+                        client: document.getElementById('CLIENT_ID').value,
                     };
 
                     fetch('/mis_qte/', {
@@ -519,7 +529,7 @@
 
                     const formData = {
                         //part_number: document.getElementById('PART_NUMBER').value,
-                        part_number: document.getElementById('PART_NUMBER_ID').value,
+                        //part_number: document.getElementById('PART_NUMBER_ID').value,
                         designation: document.getElementById('DESIGNATION').value,
                         serial_number: document.getElementById('SERIAL_NUMBER').value,
                         type_equipement: document.getElementById('TYPE_EQUIPEMENT_ID').value,
@@ -756,7 +766,19 @@
             }
         }
 
-
+        document.getElementById('ID_OPERATION').addEventListener('change', function () {
+            var selectedOperation = this.value;
+            var clientField = document.getElementById('CLIENT_ID');
+            var labelclient = document.querySelector('label[for="CLIENT_ID"]');
+            // Afficher le champ "Client" si une opération est sélectionnée
+            if (selectedOperation != 1) {
+                clientField.style.display = 'block';
+                labelclient.style.display = 'block';
+            } else {
+                clientField.style.display = 'none';
+                labelclient.style.display = 'none';
+            }
+        });
 
     </script>
     {% endblock %}

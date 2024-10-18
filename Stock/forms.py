@@ -2,7 +2,6 @@ from django import forms
 from django.db import connection
 
 class ProduitForm(forms.Form):
-    part_number1 = forms.ChoiceField(choices=[], label="Part Number", widget=forms.Select(attrs={'id': 'PART_NUMBER_ID'}))
     designation = forms.CharField(max_length=250, label="Designation", widget=forms.TextInput(attrs={'id': 'DESIGNATION'}))
     serial_number = forms.CharField(max_length=250, label="Serial Number", widget=forms.TextInput(attrs={'id': 'SERIAL_NUMBER'}))
     #type_equipement = forms.CharField(max_length=250, label="Type Equipement", widget=forms.TextInput(attrs={'id': 'TYPE_EQUIPEMENT'}))
@@ -14,8 +13,8 @@ class ProduitForm(forms.Form):
     detail_emplacement = forms.CharField(label="Detail Emplacement", widget=forms.Textarea(attrs={'id': 'DETAIL_EMPLACEMENT'}))
     Quantite_Stock = forms.IntegerField(label="Quantité en Stock", initial=0, widget=forms.NumberInput(attrs={'id': 'FORM_QUANTITE_STOCK'}) )
 
-
     Operation = forms.ChoiceField(choices=[], label="Opération", widget=forms.Select(attrs={'id': 'ID_OPERATION'}))
+    client = forms.ChoiceField(choices=[], label="Client", widget=forms.Select(attrs={'id': 'CLIENT_ID'}))
     Quantite = forms.IntegerField(label="Quantité", initial=0, widget=forms.NumberInput(attrs={'id': 'QUANTITE'}) )
     commentaire_qte = forms.CharField(label="Commentaire", initial="vide", widget=forms.Textarea(attrs={'id': 'COMMENTAIRE'}))
     
@@ -24,7 +23,7 @@ class ProduitForm(forms.Form):
         super().__init__(*args, **kwargs)
         # Charger dynamiquement les choix d'emplacement depuis la base de données
         self.fields['id_emplacement'].choices = self.get_emplacement_choices()
-        self.fields['part_number1'].choices = self.get_partnumber()
+        self.fields['client'].choices = self.get_client()
         self.fields['type_equipement1'].choices = self.get_typeequipement()
         self.fields['Operation'].choices = self.get_type_mouvement()
         
@@ -40,15 +39,15 @@ class ProduitForm(forms.Form):
         return emplacement_choices  
     
 
-    def get_partnumber(self):
+    def get_client(self):
         # Récupérer les données pour le tableau à partir de la procédure stockée LISTE_PRODUIT
         with connection.cursor() as cursor:
-            cursor.execute("{CALL [dbo].[LISTE_PARTNUMBER]}")
-            listpartnumber = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
+            cursor.execute("{CALL [dbo].[LISTE_CLIENT]}")
+            listclient = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
 
-        partnumber_choices = [(part[0], f"{part[1]}") for part in listpartnumber]
+        listclient_choices = [(part[0], f"{part[1], part[6]}") for part in listclient]
 
-        return partnumber_choices   
+        return listclient_choices   
     
 
     def get_typeequipement(self):
