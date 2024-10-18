@@ -57,7 +57,7 @@ class ProduitForm(forms.Form):
             cursor.execute("{CALL [dbo].[LISTE_TYPE_EQUIPEMENT]}")
             listtypeequiment = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
 
-        partnumber_choices = [(part[0], f"{part[1], part[2], part[3]}") for part in listtypeequiment]
+        partnumber_choices = [(part[0], f"{part[1], part[2], part[3], part[3]}") for part in listtypeequiment]
 
         return partnumber_choices  
 
