@@ -26,6 +26,7 @@ from Stock import views_pays
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_dashboard.dashboard, name='dashboard'),
+    path('mouvpartnumber/', views_dashboard.mouv_partnumber_data, name='mouvpartnumber'),
     
     path('typeequipement/', views_typeequipement.typeequipement, name='typeequipement'),
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),

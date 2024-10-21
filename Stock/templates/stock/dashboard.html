@@ -32,12 +32,10 @@
                     <tr>
                         <th>Action</th>
                         <th>PART NUMBER</th>
-                        <th>DESIGNATION</th>
-                        <th>SERIAL NUMBER</th>
-                        <th>TYPE EQUIPEMENT</th>
-                        <th>PAYS</th>
+                        <th>CATEGORIE</th>
+                        <th>CONSTRUCTEUR</th>
+                        <th>SEUIL ALERTE</th>
                         <th>QUANTITE</th>
-                        <th>SEUIL CRITIQUE</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -48,13 +46,11 @@
                             <button class="btn-Detail" type="button">Voir Détail</button>
                         </td>
                         </td>
-                        <td>{{ produit.0 }}</td>
+                        <td>{{ produit.4 }}</td>
                         <td>{{ produit.1 }}</td>
                         <td>{{ produit.2 }}</td>
-                        <td>{{ produit.3 }}</td>
-                        <td>{{ produit.9 }}</td>
-                        <td>{{ produit.10 }}</td>
-                        <td>{{ produit.11 }}</td>
+                        <td>{{ produit.5 }}</td>
+                        <td>{{ produit.6 }}</td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -83,8 +79,11 @@
                 <thead>
                     <tr>
                         <th>DATE</th>
+                        <th>PART NUMBER</th>
+                        <th>SERIAL NUMBER</th>
                         <th>ENTREE</th>
                         <th>SORTIE</th>
+                        <th>CLIENT</th>
                     </tr>
                 </thead>
                 <tbody id="modalTableBody">
@@ -321,17 +320,17 @@
                 // Récupérer la ligne du tableau
                 let row = this.closest('tr');
                 // Récupérer le part_number de la première cellule (ou d'une autre cellule selon ton tableau)
-                let serialnumber = row.cells[3].innerText;
+                let partnumber = row.cells[1].innerText;
 
 
                 const label = document.getElementById('dynamicLabel');
-                label.textContent = serialnumber;
+                label.textContent = partnumber;
 
                 const formData = {
-                    serial_number: serialnumber,
+                    partnumber: partnumber,
                 };
 
-                fetch('/detail_materiel/', {
+                fetch('/mouvpartnumber/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

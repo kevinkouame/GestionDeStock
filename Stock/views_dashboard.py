@@ -21,8 +21,7 @@ def dashboard(request):
 
     # Récupérer les données pour le tableau à partir de la procédure stockée LISTE_PRODUIT
     with connection.cursor() as cursor:
-        #cursor.execute("{CALL [dbo].[LISTE_PRODUIT]}")
-        cursor.execute("{cALL [dbo].[LISTE_PRODUIT] (1)}")
+        cursor.execute("{cALL [dbo].[LISTE_DASHBOARD]}")
         produits_data = cursor.fetchall()  # Récupère les résultats sous forme de liste de tuples
         print(produits_data)  # Imprime les données récupérées pour vérifier leur structure
 
@@ -349,13 +348,13 @@ def InsertionPrdt(request):
     
 
 
-def mouv_produit_data(request):
+def mouv_partnumber_data(request):
 
     if request.method == 'POST':
 
         # Extraire les valeurs de l'objet JSON
         data = json.loads(request.body)
-        serial_number = data.get('serial_number')
+        partnumber = data.get('partnumber')
 
         #with connection.cursor() as cursor:
             #cursor.execute("{CALL [dbo].[MOUV_PRODUIT] (?)}", [part_number])
@@ -364,8 +363,8 @@ def mouv_produit_data(request):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "{CALL [dbo].[MOUV_PRODUIT] (%s)}",
-                [serial_number]
+                "{CALL [dbo].[MOUV_PRODUIT_PARTNUMBER] (%s)}",
+                [partnumber]
             )
             # Récupérer tous les enregistrements
             result = cursor.fetchall()
