@@ -22,11 +22,16 @@ from Stock import views_client
 from Stock import views_partnumber
 from Stock import views_dashboard
 from Stock import views_pays
+from Stock import views_emplacement
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_dashboard.dashboard, name='dashboard'),
     path('mouvpartnumber/', views_dashboard.mouv_partnumber_data, name='mouvpartnumber'),
+
+    path('emplacement/', views_emplacement.ListEmplacement, name='emplacement'),
+    path('enregistreemplacement/', views_emplacement.saveemplacement, name='enregistreemplacement'),
+    path('deleteemplacement/', views_emplacement.deleteEmplacement, name='deleteemplacement'),
     
     path('typeequipement/', views_typeequipement.typeequipement, name='typeequipement'),
     path('savetypeequipement/', views_typeequipement.savetypeequipement, name='savetypeequipement'),
