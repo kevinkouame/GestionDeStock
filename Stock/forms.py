@@ -9,7 +9,8 @@ class ProduitForm(forms.Form):
     #seuil_alerte = forms.IntegerField(label="Seuil d'alerte", min_value=0, widget=forms.NumberInput(attrs={'id': 'SEUIL_ALERTE'}))
     #id_emplacement = forms.IntegerField(label="ID Emplacement")
     # Liste déroulante pour les emplacements
-    id_emplacement = forms.ChoiceField(choices=[], label="Emplacement", widget=forms.Select(attrs={'id': 'ID_EMPLACEMENT'}))  # Les choix seront remplis dans la vue
+    id_emplacement = forms.ChoiceField(choices=[], label="Emplacement", widget=forms.Select(attrs={'id': 'ID_EMPLACEMENT', 'class': 'select2'}))  # Les choix seront remplis dans la vue
+    
     detail_emplacement = forms.CharField(label="Detail Emplacement", widget=forms.Textarea(attrs={'id': 'DETAIL_EMPLACEMENT'}))
     Quantite_Stock = forms.IntegerField(label="Quantité en Stock", initial=0, widget=forms.NumberInput(attrs={'id': 'FORM_QUANTITE_STOCK'}) )
 
