@@ -88,6 +88,47 @@ DATABASES = {
 }
 
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'GestionStock',
+#        'HOST': 'localhost',  # ou l'adresse IP de ton serveur MySQL
+#        'PORT': '3306',  # Port MySQL par défaut
+#    }
+#}
+
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',   # Nom de la base de données
+#        'NAME': 'gestionstock',                 # Utilisateur par défaut
+#        'USER': 'root',                         # Utilisateur par défaut
+#        'PASSWORD': '',                         # Aucun mot de passe
+#        'HOST': 'localhost',                    # Adresse de votre serveur de base de données
+#        'PORT': '3306',                         # Port MySQL, généralement 3306  
+#        'OPTIONS' : {
+#            'ssl': {
+#                'ca': '/path-to-ca-cert.pem',   
+#                'cert': '/path-to-server-cert.pem', 
+#                'key': '/path-to-server-key.pem',
+#            }
+#        }              
+#    }
+#}
+
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'gestionstock',      # Nom de la base de données
+#        'USER': 'root',              # Utilisateur par défaut
+#        'PASSWORD': '',               # Aucun mot de passe
+#        'HOST': 'localhost',         # Adresse de votre serveur de base de données
+#        'PORT': '3306',             # Port MySQL, généralement 3306
+#    }   
+#}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

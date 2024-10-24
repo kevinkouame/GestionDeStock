@@ -31,6 +31,8 @@
                 <thead>
                     <tr>
                         <th>Action</th>
+                        <th>ID PAYS</th>
+                        <th>PAYS</th>
                         <th>PART NUMBER</th>
                         <th>CATEGORIE</th>
                         <th>CONSTRUCTEUR</th>
@@ -46,6 +48,8 @@
                             <button class="btn-Detail" type="button">Voir Détail</button>
                         </td>
                         </td>
+                        <td>{{ produit.9 }}</td>
+                        <td>{{ produit.8 }}</td>
                         <td>{{ produit.4 }}</td>
                         <td>{{ produit.1 }}</td>
                         <td>{{ produit.2 }}</td>
@@ -320,14 +324,15 @@
                 // Récupérer la ligne du tableau
                 let row = this.closest('tr');
                 // Récupérer le part_number de la première cellule (ou d'une autre cellule selon ton tableau)
-                let partnumber = row.cells[1].innerText;
-
+                let partnumber = row.cells[3].innerText;
+                let idpays = row.cells[1].innerText;
 
                 const label = document.getElementById('dynamicLabel');
                 label.textContent = partnumber;
 
                 const formData = {
                     partnumber: partnumber,
+                    idpays: idpays,
                 };
 
                 fetch('/mouvpartnumber/', {

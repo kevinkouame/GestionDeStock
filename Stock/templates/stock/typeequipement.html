@@ -234,7 +234,7 @@
                     <th><input type="text" name="constructeur" placeholder="Entrez le constructeur"></th>
                 </tr>
                 <tr>
-                    <th>Capacité :<span class="required">*</span></th>
+                    <th>Capacité :</th>
                     <th><input type="text" name="capacite" placeholder="Entrez la capacité"></th>
                 </tr>
                 <tr>
@@ -540,7 +540,7 @@
         var description = document.querySelector('textarea[name="description"]').value;
 
         // Vérifie que tous les champs sont remplis
-        if (categorie === "" || constructeur === "" || capacite === "" || partnumber === "" || seuil === "") {
+        if (categorie === "" || constructeur === "" || partnumber === "" || seuil === "") {
             alert("Tous les champs marqués comme obligatoires doivent être complétés.");
             return false; // Empêche l'envoi du formulaire
         }

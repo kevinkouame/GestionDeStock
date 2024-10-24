@@ -355,6 +355,7 @@ def mouv_partnumber_data(request):
         # Extraire les valeurs de l'objet JSON
         data = json.loads(request.body)
         partnumber = data.get('partnumber')
+        idpays = data.get('idpays')
 
         #with connection.cursor() as cursor:
             #cursor.execute("{CALL [dbo].[MOUV_PRODUIT] (?)}", [part_number])
@@ -363,8 +364,10 @@ def mouv_partnumber_data(request):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "{CALL [dbo].[MOUV_PRODUIT_PARTNUMBER] (%s)}",
-                [partnumber]
+                "{CALL [dbo].[MOUV_PRODUIT_PARTNUMBER] (%s,%s)}",
+                [partnumber,
+                 str(idpays),
+                ],
             )
             # Récupérer tous les enregistrements
             result = cursor.fetchall()
